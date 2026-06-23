@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import httpx
 import asyncio
 import logging
+import os
 from typing import Dict, Any, Tuple
 
 
@@ -13,7 +14,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
-API_BASE_URL = "http://localhost:8000/api/v1"
+API_BASE_URL = os.environ.get("API_BASE_URL", "http://localhost:8000/api/v1")
 
 
 def call_analysis_api(resume_file, job_description: str) -> Tuple[bool, Dict[str, Any]]:
@@ -138,7 +139,7 @@ def health():
 
 
 if __name__ == "__main__":
-    logger.info("Starting Flask frontend server on http://localhost:5000")
-    logger.info("Backend API should be running on http://localhost:8000")
-    logger.info("Ollama should be running on http://localhost:11434")
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    logger.info(f"Starting Flask frontend server on port {port}")
+    logger.info(f"Using Backend API URL: {API_BASE_URL}")
+    app.run(debug=False, host="0.0.0.0", port=port)
