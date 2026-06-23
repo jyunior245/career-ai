@@ -1,0 +1,18 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Trigger Render Deploy Hook
+      run: |
+        echo "Deploy triggered automatically by Render via GitHub integration."
+        echo "Configure the Render service to auto-deploy on push to main."
+        echo "No manual deploy hook required — Render monitors this branch directly."

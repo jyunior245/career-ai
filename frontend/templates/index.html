@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerAI - Análise de Currículo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">
+                <i class="bi bi-briefcase-fill"></i> CareerAI
+            </span>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        {% if error_message %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ error_message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+
+        {% if success_message %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ success_message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="card shadow-lg">
+                    <div class="card-body p-5">
+                        <h1 class="card-title mb-4">Análise de Currículo</h1>
+                        <p class="text-muted mb-4">Envie seu currículo em PDF e a descrição da vaga para receber feedback personalizado.</p>
+
+                        <form id="analysisForm" method="POST" action="{{ url_for('analyze') }}" enctype="multipart/form-data">
+                            <div class="mb-4">
+                                <label for="resumeFile" class="form-label">
+                                    <strong>Seu Currículo (PDF)</strong>
+                                    <small class="text-muted d-block">Envie seu currículo em PDF (máx. 10MB)</small>
+                                </label>
+                                <input 
+                                    type="file"
+                                    class="form-control"
+                                    id="resumeFile"
+                                    name="resume_file"
+                                    accept=".pdf"
+                                    required
+                                >
+                                <small id="fileInfo" class="text-muted d-block mt-2">Nenhum arquivo selecionado</small>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="jobDescription" class="form-label">
+                                    <strong>Descrição da Vaga</strong>
+                                    <small class="text-muted d-block">Cole a descrição da vaga (50-10.000 caracteres)</small>
+                                </label>
+                                <textarea 
+                                    class="form-control" 
+                                    id="jobDescription" 
+                                    name="job_description" 
+                                    rows="6"
+                                    placeholder="Cole a descrição da vaga aqui..."
+                                    required
+                                ></textarea>
+                                <small id="jobCounter" class="text-muted d-block mt-2">0 / 10.000 caracteres</small>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                                    <i class="bi bi-play-fill"></i> Analisar Agora
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <p class="mb-0">&copy; 2024 CareerAI. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
