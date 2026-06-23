@@ -46,11 +46,21 @@ def call_analysis_api(resume_file, job_description: str) -> Tuple[bool, Dict[str
         logger.info(f"API response status: {response.status_code}")
         
         if response.status_code == 200:
-            logger.info("Analysis successful")
-            return True, response.json()
+            try:
+                response_data = response.json()
+                logger.info("Analysis successful")
+                return True, response_data
+            except Exception as e:
+                logger.error(f"Failed to parse successful response: {str(e)}")
+                return False, {"error": "Received invalid format from server. Please try again later."}
         else:
-            error_data = response.json()
-            error_msg = error_data.get("detail", "Analysis failed")
+            try:
+                error_data = response.json()
+                error_msg = error_data.get("detail", f"Analysis failed with status {response.status_code}")
+            except Exception:
+                # Fallback for non-JSON errors (like 502 Bad Gateway from Render)
+                error_msg = f"Server error ({response.status_code}). The backend service might be waking up or temporarily unavailable."
+                
             logger.error(f"API error: {error_msg}")
             return False, {"error": error_msg}
     
@@ -59,7 +69,7 @@ def call_analysis_api(resume_file, job_description: str) -> Tuple[bool, Dict[str
         return False, {"error": "Request timeout. Please try again."}
     except httpx.ConnectError:
         logger.error("Cannot connect to API")
-        return False, {"error": "Cannot connect to API. Please ensure backend is running on port 8000."}
+        return False, {"error": "Cannot connect to API. Please ensure backend is running."}
     except Exception as e:
         logger.error(f"Unexpected error: {str(e)}", exc_info=True)
         return False, {"error": str(e)}
