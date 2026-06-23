@@ -4,6 +4,9 @@ import asyncio
 import logging
 import os
 from typing import Dict, Any, Tuple
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # Configure logging
@@ -14,7 +17,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__, template_folder='frontend/templates', static_folder='frontend/static')
-API_BASE_URL = os.environ.get("API_BASE_URL", "http://localhost:8000/api/v1")
+API_BASE_URL = os.environ.get("API_BASE_URL")
 
 
 def call_analysis_api(resume_file, job_description: str) -> Tuple[bool, Dict[str, Any]]:

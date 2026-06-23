@@ -26,4 +26,4 @@ services:
       - key: DEBUG
         value: "False"
       - key: API_BASE_URL
-        value: "https://career-ai-backend.onrender.com/api/v1"
+        value: "https://career-ai-backend-axi5.onrender.com/api/v1"
